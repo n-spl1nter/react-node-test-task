@@ -1,11 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { hash } from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
+import { Role } from '../config/types/role';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+      @InjectRepository(User) private readonly userRepository: Repository<User>,
+  ) {}
+  async  create(createUserDto: CreateUserDto, userId: number, userRole: Role) {
+    const existedUser = await this.userRepository.findOne({
+      where: { email: createUserDto.email },
+    });
+    if (existedUser) {
+      throw new BadRequestException('User is already registered');
+    }
+    const role = userRole === Role.ADMIN ? Role.DEALER : Role.CUSTOMER;
+
+    const userEntity = this.userRepository.create({
+      email: createUserDto.email,
+      role,
+      password: await hash(createUserDto.password, 12)
+    });
+
+    return this.userRepository.save(userEntity);
   }
 
   findAll() {
@@ -13,14 +34,23 @@ export class UserService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return this.userRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  findByEmail(email: string) {
+    return this.userRepository.findOne({ where: { email } });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number, userId: number, userRole: Role) {
+    const existedUser = await this.userRepository.findOne({ where: { id } });
+    if (!existedUser) {
+      throw new NotFoundException('User not found');
+    }
+    if (userRole !== Role.ADMIN && existedUser.createdBy.id !== userId) {
+      throw new ForbiddenException('No access to user');
+    }
+
+    await this.userRepository.delete({ id })
+    return null;
   }
 }
