@@ -7,6 +7,7 @@
 - PostgreSQL for database
 
 ### To run application follow these steps:
+- inside back folder copy .env.example to .env with command ```cp ./back/.env.example ./back/.env```
 - run in your command line ```docker-compose up```
 
 ### You have to follow next steps only on first launch:
