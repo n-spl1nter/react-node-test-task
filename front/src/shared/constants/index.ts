@@ -6,4 +6,5 @@ export enum QueryKeys {
     addUser = 'addUser',
     transactions = 'transactions',
     addTransaction = 'addTransaction',
+    deleteTransaction = 'deleteTransaction',
 }

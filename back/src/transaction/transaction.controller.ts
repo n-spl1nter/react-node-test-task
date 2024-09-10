@@ -30,4 +30,13 @@ export class TransactionController {
     const { user } = request;
     return this.transactionService.findAll(+user.sub);
   }
+
+  @Delete(':id')
+  @Roles(Role.CUSTOMER)
+  @UseGuards(AuthGuard, RolesGuard)
+  remove(
+      @Param('id') id: string
+  ) {
+    return this.transactionService.remove(+id);
+  }
 }

@@ -4,4 +4,5 @@ export enum Endpoints {
     profile = '/user/profile',
     users = '/user',
     transaction = '/transaction',
+    transactionByID = '/transaction/:id',
 }
