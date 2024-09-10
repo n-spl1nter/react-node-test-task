@@ -27,8 +27,8 @@ export class User {
     @OneToMany(() => Transaction, (transaction) => transaction.user)
     transactions: Transaction[];
 
-    @OneToOne(() => User)
-    createdBy: User | null;
+    @Column()
+    createdBy: number | null;
 
     @CreateDateColumn()
     createdAt: Date;

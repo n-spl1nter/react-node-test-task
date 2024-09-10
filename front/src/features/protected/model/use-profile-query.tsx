@@ -10,6 +10,7 @@ export const useProfileQuery = () => {
         {
             staleTime: 1000 * 60 * 60, // 1hr
             retry: false,
+            refetchOnWindowFocus: false,
         }
     )
 }

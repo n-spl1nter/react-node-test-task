@@ -19,18 +19,22 @@ export class UserService {
       throw new BadRequestException('User is already registered');
     }
     const role = userRole === Role.ADMIN ? Role.DEALER : Role.CUSTOMER;
-
     const userEntity = this.userRepository.create({
       email: createUserDto.email,
       role,
+      createdBy: userId,
       password: await hash(createUserDto.password, 12)
     });
 
     return this.userRepository.save(userEntity);
   }
 
-  findAll() {
-    return `This action returns all user`;
+  findAll(userId: number, userRole: Role) {
+    if (userRole === Role.ADMIN) {
+      return this.userRepository.find();
+    }
+
+    return this.userRepository.find({ where: { createdBy: userId } });
   }
 
   findOne(id: number) {
@@ -46,7 +50,7 @@ export class UserService {
     if (!existedUser) {
       throw new NotFoundException('User not found');
     }
-    if (userRole !== Role.ADMIN && existedUser.createdBy.id !== userId) {
+    if (userRole !== Role.ADMIN && existedUser.createdBy !== userId) {
       throw new ForbiddenException('No access to user');
     }
 

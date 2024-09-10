@@ -8,4 +8,5 @@ export type UserProfile = {
     id: number;
     role: Role;
     email: string;
-}
+    createdAt: string;
+};

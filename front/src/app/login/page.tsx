@@ -1,9 +1,11 @@
-import { Input, Layout, Flex, Form, Button } from 'antd';
+'use client';
+import { Layout } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
 import { LoginForm } from '@/app/login/_components/login-form';
 import styles from './page.module.css';
+import { withUnauthenticatedPage } from '@/features/protected/view/with-unauthenticated-page';
 
-export default function LoginPage() {
+function LoginPage() {
     return (
         <Layout>
             <Content>
@@ -14,3 +16,5 @@ export default function LoginPage() {
         </Layout>
     );
 }
+
+export default withUnauthenticatedPage(LoginPage);
