@@ -2,12 +2,14 @@ FROM node:18
 
 WORKDIR /app
 
-COPY package.json .
+COPY package*.json .
 
 RUN npm install
 
 COPY . .
 
-EXPOSE 3030
+ENV NEXT_TELEMETRY_DISABLED 1
 
-CMD ["npm", "start"]
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]
