@@ -17,6 +17,7 @@ export class Transaction {
     @Column()
     value: number;
 
+    @Column()
     user_id: number;
 
     @ManyToOne(() => User, (user) => user.transactions, { onDelete: 'CASCADE' })

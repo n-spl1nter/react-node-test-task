@@ -18,7 +18,7 @@ export class TransactionController {
       @Req() request
   ) {
     const { user } = request;
-    return this.transactionService.create(createTransactionDto, user.id);
+    return this.transactionService.create(createTransactionDto, user.sub);
   }
 
   @Get()
@@ -28,6 +28,6 @@ export class TransactionController {
       @Req() request
   ) {
     const { user } = request;
-    return this.transactionService.findAll(user.id);
+    return this.transactionService.findAll(+user.sub);
   }
 }

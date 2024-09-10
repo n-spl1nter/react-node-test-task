@@ -7,6 +7,8 @@ import { useIsDealer } from '@/features/protected/model/use-is-dealer';
 import { UsersList } from '@/features/users/view/users-list';
 import { AddUser } from '@/features/users/view/add-user';
 import { Layout } from 'antd';
+import { TransactionsList } from '@/features/transactions/view/transactions-list';
+import { AddTransaction } from '@/features/transactions/view/add-transaction';
 
 function DashboardPage() {
   const isAdmin = useIsAdmin();
@@ -15,12 +17,19 @@ function DashboardPage() {
     <MainLayout>
         {isAdmin || isDealer ? (
             <Layout className={styles.layout}>
-              <div className={styles.userButton}>
+              <div className={styles.addEntityButton}>
                 <AddUser />
               </div>
               <UsersList />
             </Layout>
-        ) : null}
+        ) : (
+            <Layout className={styles.layout}>
+                <div className={styles.addEntityButton}>
+                  <AddTransaction />
+                </div>
+                <TransactionsList />
+            </Layout>
+          )}
     </MainLayout>
   );
 }
